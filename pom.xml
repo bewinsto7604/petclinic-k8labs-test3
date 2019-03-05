@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.springframework.samples</groupId>
-  <artifactId>petclinic-k8labs-userx</artifactId>
+  <artifactId>petclinic-k8labs-test3</artifactId>
   <version>3.0.1.RELEASE</version>
 
   <parent>
@@ -59,17 +59,30 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Databases - Uses HSQL by default -->
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <scope>runtime</scope>
-    </dependency>
+	<!-- HIBERNATE -->
+	<dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-entitymanager</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-validator</artifactId>
+	</dependency>
+
+	<dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-ehcache</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>net.sf.ehcache</groupId>
+	    <artifactId>ehcache</artifactId>
+	    <exclusions>
+		<exclusion>
+		    <groupId>commons-logging</groupId>
+		    <artifactId>commons-logging</artifactId>
+		</exclusion>
+	    </exclusions>
+	</dependency>
 
     <!-- caching -->
     <dependency>
@@ -207,16 +220,6 @@
           </dependency>
         </dependencies>
       </plugin>    
-    
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.8.2</version></plugin>
-    
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M1</version></plugin>
     </plugins>
   </build>
 
@@ -265,5 +268,27 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
-
+  <profiles>
+        <profile>
+            <id>HSQLDB</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <db.script>hsqldb</db.script>
+                <jpa.database>HSQL</jpa.database>
+                <jdbc.driverClassName>org.hsqldb.jdbcDriver</jdbc.driverClassName>
+                <jdbc.url>jdbc:hsqldb:mem:petclinic</jdbc.url>
+                <jdbc.username>sa</jdbc.username>
+                <jdbc.password/>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+   </profiles>     
 </project>
